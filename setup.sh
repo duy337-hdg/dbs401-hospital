@@ -124,6 +124,15 @@ EOF
 
 # Import SQL file
 sudo mysql -u root "$DB_NAME" < "$WEB_DIR/myhmsdb.sql"
+
+# Add flags to database
+sudo mysql -u root "$DB_NAME" << SQLEOF
+ALTER TABLE admintb ADD COLUMN flag VARCHAR(100);
+UPDATE admintb SET flag='FPT_DBS{1_SQL_1nj3ct10n_1s_34sy}' WHERE username='admin';
+ALTER TABLE patreg ADD COLUMN flag VARCHAR(100);
+INSERT INTO patreg(fname,lname,gender,email,contact,password,cpassword,flag) VALUES('Secret','Patient','Male','secret@hospital.com','0000000000','secret123','secret123','FPT_DBS{2_1D0R_p4t13nt_d4t4_l34k}');
+INSERT INTO patreg(fname,lname,gender,email,contact,password,cpassword,flag) VALUES('admin','hidden','Male','hidden@hospital.com','0000000001','hidden123','hidden123','FPT_DBS{3_pr1v_3sc_4dm1n_4cc3ss}');
+SQLEOF
 echo -e "${GREEN}[+] Database '$DB_NAME' created and data imported.${NC}"
 
 # -----------------------------------------------
